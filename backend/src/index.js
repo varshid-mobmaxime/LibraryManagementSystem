@@ -7,6 +7,7 @@ import helmet from "helmet";
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const booksRoutes = require("./routes/booksRoutes");
+const requestBooksRoutes = require("./routes/requestBookRoute");
 const favouriteRoutes = require("./routes/favouriteRoutes");
 // const commentsRoutes = require("./routes/commentsRoutes");
 const middlewares = require("./middleware/middlewares");
@@ -50,6 +51,7 @@ const startServer = async () => {
   app.use("/user", userRoutes);
   app.use("/admin", adminRoutes);
   app.use("/books", booksRoutes);
+  app.use("/request-book", requestBooksRoutes);
   app.use("/books", favouriteRoutes);
   // app.use("/posts", postsRoutes);
   // app.use("/comments", commentsRoutes);

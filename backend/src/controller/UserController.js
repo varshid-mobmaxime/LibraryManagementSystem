@@ -7,9 +7,40 @@ exports.getUsers = tryCatch(async (req, res) => {
   res.status(200).json({ users });
 });
 
+exports.getUser = tryCatch(async (req, res) => {
+  const user = await User.findById(req.params.id).select([
+    "-password",
+    "-favourites",
+    "-bookRequests",
+    "-request",
+  ]);
+
+  console.log("user Details is =--> ", user);
+
+  // const userId = req.user._id;
+  // const { favourites } = await User.findById(userId);
+
+  // const isBookFavourite = favourites.includes(req.params.id);
+
+  // const booksWithFavouriteFlag = {
+  //   ...book.toObject(),
+  //   isFavourite: isBookFavourite,
+  // };
+
+  res.status(201).json({ success: true, result: user });
+});
+
 exports.register = tryCatch(async (req, res, next) => {
-  const { firstName, lastName, userName, phoneNumber, email, password, role } =
-    req.body;
+  const {
+    firstName,
+    lastName,
+    userName,
+    phoneNumber,
+    email,
+    password,
+    role,
+    avatar,
+  } = req.body;
 
   //Check User name length more then 4
   if (userName.length <= 4) {
@@ -50,15 +81,25 @@ exports.register = tryCatch(async (req, res, next) => {
     password,
     phoneNumber,
     role,
+    avatar,
   });
 
+  const userObj = await User.findOne({ email }).select([
+    "-password",
+    // "-favourites",
+    "-bookRequests",
+    "-request",
+  ]);
+
   const token = user.getSignedJwt();
+
+  console.log("user obj is =--> ", userObj);
 
   res.status(201).json({
     success: true,
     message: "Register Successfully.",
     token,
-    user,
+    user: userObj,
   });
 });
 
@@ -78,6 +119,8 @@ exports.login = tryCatch(async (req, res, next) => {
     "-bookRequests",
     "-request",
   ]);
+
+  console.log("userObj is =--> ", userObj);
 
   if (!user) {
     return next({
@@ -144,5 +187,55 @@ exports.changePassword = tryCatch(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Password updated successfully.",
+  });
+});
+
+exports.updateUser = tryCatch(async (req, res) => {
+  const { firstName, lastName, email, phoneNumber, userName, avatar, role } =
+    req.body;
+  const userId = req.params.id;
+  console.log("req.params.id is =--> ", req.params.id);
+
+  // Find the user by ID
+  const user = await User.findById(userId).select("-password");
+
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found." });
+  }
+
+  // Update the user's password
+
+  await User.findByIdAndUpdate(userId, {
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    userName,
+    avatar,
+    role,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "User updated successfully.",
+  });
+});
+
+exports.deleteUser = tryCatch(async (req, res) => {
+  let user = await User.findById(req.params.id);
+
+  if (!User) {
+    res.status(404).json({
+      success: false,
+      message: "User Not Found.",
+    });
+  }
+
+  await user.remove();
+
+  res.status(201).json({
+    success: true,
+    message: "user deleted Successfully.",
+    data: {},
   });
 });

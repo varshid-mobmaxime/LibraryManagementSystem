@@ -5,10 +5,18 @@ const {
   getBook,
   getBooks,
   updateBook,
+  getFavouriteBooks,
 } = require("../controller/BooksController");
+
+const {
+  requestBook,
+  requestBookList,
+} = require("../controller/RequestBookController");
+
 const { authenticate, authorize } = require("../middleware/auth");
 
 router.get("/", authenticate, getBooks);
+router.get("/get-favourite-books", authenticate, getFavouriteBooks);
 router.get("/:id", authenticate, getBook);
 router.post("/", authenticate, authorize(["admin"]), addBook);
 router.put("/:id", authenticate, authorize(["admin"]), updateBook);

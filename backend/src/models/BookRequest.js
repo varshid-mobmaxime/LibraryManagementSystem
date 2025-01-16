@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { BOOK_REQUEST_STATUS } = require("../constants");
 
 const BookRequestSchema = new mongoose.Schema(
   {
@@ -10,11 +11,12 @@ const BookRequestSchema = new mongoose.Schema(
     book: {
       type: mongoose.Schema.ObjectId,
       ref: "Books",
+      required: true,
     },
     status: {
-      type: String,
-      default: "Book Requested",
-      enum: ["Book Request", "Pending From Admin,Book Borrowed,Canceled"],
+      type: Number,
+      default: BOOK_REQUEST_STATUS.NotRequested,
+      enum: Object.values(BOOK_REQUEST_STATUS),
     },
   },
   { timestamps: true }

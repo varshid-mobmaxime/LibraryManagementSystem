@@ -7,8 +7,10 @@ import { Navigate, useNavigate } from "react-router-dom";
 const Signin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("varshid@yopmail.com");
-  const [password, setPassword] = useState("Varshid@123");
+  const [email, setEmail] = useState("hardik@yopmail.com");
+  const [password, setPassword] = useState("Hardik@123");
+  // const [email, setEmail] = useState("varshid@yopmail.com");
+  // const [password, setPassword] = useState("Varshid@123");
 
   const onSignIn = useCallback(() => {
     if (!email) {
@@ -40,7 +42,7 @@ const Signin = () => {
     dispatch(
       SignInRequest(payload, (isSuccess) => {
         if (isSuccess) {
-          navigate("/", { replace: true });
+          navigate("/books", { replace: true });
         }
       })
     );
@@ -57,44 +59,38 @@ const Signin = () => {
   }, []);
 
   return (
-    <div className="h-auto bg-zinc-900 px-12 py-8 flex items-center justify-center w-full">
-      <div className="bg-zinc-800 rounded-lg px-8 py-5 w-full md:w-3/6 lg:w-2/6">
-        <p className="text-zinc-200 text-xl">Sign In</p>
-        <div className="mt-10">
-          <label htmlFor="" className="text-zinc-400 ">
-            Email :
-          </label>
-          <input
-            onChange={onEmailChange}
-            type="email"
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="email"
-            name="Email"
-            required
-          />
+    <>
+      <div className="page-section login-page d-flex align-items-center justify-content-center">
+        <div className="px-5 py-3 bg-primary-custom rounded text-white login-box">
+          <h2 className="text-center">Sign In</h2>
+          <br />
+          <div className="row align-items-center mb-3">
+            <div className="col-4">Email</div>
+            <div className="col-8">
+              <div className="form-group">
+                <input className="form-control" onChange={onEmailChange} />
+              </div>
+            </div>
+          </div>
+          <div className="row align-items-center">
+            <div className="col-4">Password</div>
+            <div className="col-8">
+              <div className="form-group">
+                <input className="form-control" onChange={onPasswordChange} />
+              </div>
+            </div>
+            <div className="d-flex align-items-center justify-content-center">
+              <button
+                className="login-header-btn d-inline-block"
+                onClick={onSignIn}
+              >
+                Sign In
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div className="mt-4">
-          <label htmlFor="" className="text-zinc-400">
-            Password :
-          </label>
-          <input
-            onChange={onPasswordChange}
-            type="password"
-            className="w-full mt-2 bg-zinc-900 text-zinc-100 p-2 outline-none"
-            placeholder="password"
-            name="Password"
-            required
-          />
-        </div>
-        <button
-          onClick={onSignIn}
-          className="w-full bg-blue-400 mt-5 text-white font-semibold rounded hover:text-zinc-700 py-2 hover:bg-white"
-        >
-          Sign In
-        </button>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -4,7 +4,6 @@
 //   UserOutlined,
 //   VideoCameraOutlined,
 // } from "@ant-design/icons";
-// import Container from "react-bootstrap/Container";
 
 // import { Layout, Menu, theme } from "antd";
 // const { Header, Content, Footer, Sider } = Layout;
@@ -79,29 +78,39 @@
 // };
 // export default Dashboard;
 
-import React, { useCallback, useEffect, useState } from "react";
 import {
   AppstoreOutlined,
   BarChartOutlined,
   CloudOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   ShopOutlined,
   TeamOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Card, Layout, List, Menu, theme } from "antd";
-import { useDispatch } from "react-redux";
-import {
-  getAllBooksList,
-  getBookDetails,
-} from "../../redux/actions/BookAction";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Button, Card, Layout, Menu, theme } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
+import { FaUsers } from "react-icons/fa";
+import { IoBookSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import AddBook from "../../assets/add.png";
+import { getAllBooksList } from "../../redux/actions/BookAction";
+
+import { IoIosBookmarks } from "react-icons/io";
+import { PiShoppingCartFill } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
+import { AppRoleEnum } from "../../constants/appConstant";
+import RouteConstants from "../../constants/navigationRouteConstant";
+import { DashboardRoutes } from "../../route/NavigationRoutes";
+
 const { Header, Content, Footer, Sider } = Layout;
 const siderStyle = {
+  backgroundColor: "linear-gradient(135deg, #d3dcea, #33ccff)",
   overflow: "auto",
-  height: "100vh",
-  // position: "fixed",
+  // height: "100vh",
+  position: "static",
   insetInlineStart: 0,
   top: 0,
   bottom: 0,
@@ -128,9 +137,11 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { userData } = useSelector((state) => state.auth);
+
   const onReadMorePress = useCallback(
     (id) => {
-      navigate("/book-details", {
+      navigate(RouteConstants.BOOK_DETAIL_PAGE, {
         state: {
           id,
         },
@@ -141,7 +152,10 @@ const Dashboard = () => {
 
   const [bookList, setBookList] = useState();
 
-  console.log("BookList is =--> ", bookList);
+  console.log(
+    "userData.role === AppRoleEnum.Admin is =--> ",
+    userData.role === AppRoleEnum.Admin
+  );
 
   useEffect(() => {
     dispatch(
@@ -154,137 +168,192 @@ const Dashboard = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
-  return (
-    <Layout hasSider>
-      <Sider style={siderStyle}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={items}
+  const [collapsed, setCollapsed] = useState(false);
+  const [hasResize, setHasResize] = useState();
+  const [windowWidth, setWindowWidth] = useState();
+  const [isSideOpen, setIsSideOpen] = useState();
+  // useEffect(() => {
+  //   window.addEventListener("resize", () => {
+  //     setHasResize((prev) => !prev);
+  //     setWindowWidth(window.innerWidth);
+  //     console.log("windowWidth", windowWidth);
+  //     if (window.innerWidth > 500) setIsSideOpen(true);
+  //   });
+  // }, [hasResize, windowWidth]);
+
+  const userItem = [
+    {
+      key: RouteConstants.BOOK_PAGE,
+      icon: <IoBookSharp />,
+      label: "All Books",
+    },
+    {
+      key: RouteConstants.FAVOURITE_BOOKS_PAGE,
+      icon: <IoIosBookmarks />,
+      label: "Favourite Books",
+    },
+    {
+      key: RouteConstants.USER_REQUESTED_BOOKS,
+      icon: <IoIosBookmarks />,
+      label: "Issue Book",
+    },
+    // {
+    //   key: "3",
+    //   icon: <UploadOutlined />,
+    //   label: "nav 3",
+    // },
+  ];
+  const adminItem = [
+    {
+      key: RouteConstants.BOOK_PAGE,
+      icon: <IoBookSharp />,
+      label: "All Books",
+    },
+    {
+      key: RouteConstants.ADD_BOOK_PAGE,
+      icon: (
+        <img
+          src={AddBook}
+          alt="Add Book"
+          style={{
+            height: 14,
+            width: 14,
+            filter: "invert(100%) brightness(100%) contrast(100%)",
+          }}
         />
-      </Sider>
-      <Layout
-        style={
-          {
-            // marginInlineStart: 20,
-            // flex: 1,
-            // backgroundColor: "red",
-          }
-        }
-      >
-        {/* <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        /> */}
-        <Content
-          style={{
-            padding: 15,
-            // flex: 1,
-            // flexGrow: 1,
-            // backgroundColor: "red",
-            // margin: "24px 16px 0",
-            // overflow: "initial",
-          }}
-        >
-          <List
-            itemLayout="horizontal"
-            style={{ flex: 1 }}
-            // pagination
-            grid={{
-              gutter: 10,
-              column: 3,
-              xxl: 6,
-              xl: 4,
-              lg: 3,
-              md: 2,
-              sm: 1,
-              xs: 1,
-            }}
-            dataSource={bookList}
-            // dataSource={bookList}
-            // style={{ backgroundColor: "pink" }}
-            renderItem={(item) => (
-              <List.Item
+      ),
+      label: "Add Books",
+    },
+    {
+      key: RouteConstants.ALL_USER_PAGE,
+      icon: <FaUsers />,
+      label: "All User",
+    },
+    {
+      key: RouteConstants.REQUEST_BOOK_PAGE,
+      icon: <PiShoppingCartFill />,
+      label: "Book Requests",
+    },
+    // {
+    //   key: "",
+    //   icon: <UploadOutlined />,
+    //   label: "nav 3",
+    // },
+  ];
+
+  return (
+    <>
+      <div className="page-section">
+        <Layout hasSider className="page-section">
+          {/* <Sider style={siderStyle} collapsible collapsed={collapsed}>
+            <div className="demo-logo-vertical" />
+            <Menu
+              theme="dark"
+              mode="inline"
+              defaultSelectedKeys={["1"]}
+              items={items}
+            />
+          </Sider> */}
+
+          <Sider
+            trigger={null}
+            collapsible
+            collapsed={collapsed}
+            style={siderStyle}
+            // className="bg-danger"
+          >
+            <div className="demo-logo-vertical" />
+            <Menu
+              className="bg-transparent"
+              onClick={(e) => {
+                navigate(e?.key);
+              }}
+              theme="dark"
+              mode="inline"
+              defaultSelectedKeys={[RouteConstants.BOOK_PAGE]}
+              items={
+                userData?.role === AppRoleEnum.Admin ? adminItem : userItem
+              }
+            />
+          </Sider>
+          <Layout>
+            <div className="d-flex flex-column">
+              <Header
                 style={{
-                  flex: 1,
-                  // backgroundColor: "orange",
-                  // alignItems: "center",
-                  // justifyContent: "center",
+                  padding: 0,
+                  background: colorBgContainer,
                 }}
               >
-                <div className="border rounded-lg shadow-md p-4 bg-white">
-                  <img
-                    src={item.url}
-                    alt={item.title}
-                    className="w-full h-80 object-cover rounded-md "
-                  />
-                  <h3 className="mt-4 font-bold">{item.title}</h3>
-                  {/* <p className="text-sm text-gray-600">{item.desc}</p> */}
-                  {/* <p className="mt-2">
-                    <span className="font-semibold">Author:</span> {item.author}
-                  </p> */}
-                  {/* <p className="mt-1">
-                    <span className="font-semibold">Language:</span>{" "}
-                    {item.language}
-                  </p>
-                  <p className="mt-1">
-                    <span className="font-semibold">Copies Available:</span>{" "}
-                    {item.copies}
-                  </p> */}
-                  <button
-                    className="mt-4 w-full border  bg-zinc-50 text-zinc-800 py-2  hover:bg-zinc-600 hover:text-white transition"
-                    onClick={() => {
-                      onReadMorePress(item?._id);
-                    }}
-                  >
-                    Read More
-                  </button>
-                </div>
+                <Button
+                  type="text"
+                  icon={
+                    collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />
+                  }
+                  onClick={() => setCollapsed(!collapsed)}
+                  style={{
+                    fontSize: "16px",
+                    width: 64,
+                    height: 64,
+                  }}
+                />
+              </Header>
+              <Layout className="flex-grow-1 layout-band">
+                <Content
+                  style={{
+                    padding: 15,
+                  }}
+                >
+                  <DashboardRoutes />
 
-                {/* ); }; */}
-                {/* <Card
-                  hoverable
-                  style={{
-                    width: 240,
-                    flex: 1,
-                    // height: 400,
-                  }}
-                  cover={<img alt="Book Image" src={item?.url} />}
-                >
-                  <Meta
-                    // prefixCls="asdASdasd"
-                    style={{ maxHeight: 100 }}
-                    title={item?.title}
-                    description={item?.desc}
-                  />
-                </Card> */}
-                {/* <Card
-                  style={{
-                    flex: 1,
-                    // backgroundColor: "orange",
-                    // flexWrap: "wrap",
-                  }}
-                  title={item.title}
-                >
-                  Card content
-                </Card> */}
-              </List.Item>
-            )}
-          />
-        </Content>
-        {/* <Footer
-          style={{
-            textAlign: "center",
-          }}
-        >
-          Ant Design ©{new Date().getFullYear()} Created by Ant UED
-        </Footer> */}
-      </Layout>
-    </Layout>
+                  {/* <Routes>
+                    <Route path="/books" element={<Books />} />
+                    <Route
+                      path="/change-password"
+                      element={<ChangePassword />}
+                    />
+                    <Route path="/view-profile" element={<ViewProfile />} />
+                    <Route path="/book-details" element={<BookDetails />} />
+                  </Routes> */}
+                  {/* <div className="row">
+                      {bookList &&
+                        bookList.map((data) => {
+                          return (
+                            <div className="col-12 col-sm-6 col-lg-4 col-xl-3 mb-5 mb-lg-3">
+                              <Card
+                                hoverable
+                                className="d-block border"
+                                cover={
+                                  <img
+                                    alt="example"
+                                    src={data.url}
+                                    style={{
+                                      minHeight: "300px",
+                                      maxHeight: "300px",
+                                    }}
+                                  />
+                                }
+                                actions={[
+                                  <ReadOutlined
+                                    key="read more"
+                                    onClick={() => {
+                                      onReadMorePress(data?._id);
+                                    }}
+                                  />,
+                                ]}
+                              >
+                                <div>{data.title}</div>
+                              </Card>
+                            </div>
+                          );
+                        })}
+                    </div> */}
+                </Content>
+              </Layout>
+            </div>
+          </Layout>
+        </Layout>
+      </div>
+    </>
   );
 };
 export default Dashboard;

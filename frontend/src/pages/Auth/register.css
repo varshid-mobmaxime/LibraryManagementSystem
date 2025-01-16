@@ -1,0 +1,43 @@
+.gradient-bg {
+  background: linear-gradient(90deg, #0e344b, #1f7e9e);
+}
+
+.gradient-card {
+  background: linear-gradient(135deg, #0066ff, #33ccff);
+  color: white;
+  border-radius: 12px;
+}
+
+.gradient-card .form-label {
+  font-weight: 500;
+}
+
+.register-btn {
+  padding: 5px 10px;
+  min-width: 100px;
+  border-radius: 10px;
+  border: 1px solid #c99d4c;
+  color: #fff;
+  font-weight: 500;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+.register-btn:hover {
+  background-color: transparent;
+  border: 1px solid #c99d4c;
+  color: #c99d4c;
+}
+
+.gradient-card .form-control {
+  border-radius: 8px;
+}
+
+.gradient-card .btn {
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.gradient-card .is-invalid {
+  border-color: #ff4d4f;
+  background-color: #fff5f5;
+}

@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Footer from "./components/Footer/Footer";
 import NavBar from "./components/Navbar/NavBar";
 import NavigationRoutes from "./route/NavigationRoutes";
 import { ToastContainer } from "react-toastify";
@@ -8,17 +7,31 @@ import Loader from "./components/Loader";
 
 const App = () => {
   return (
-    // <div style={{ display: "contents" }}>
     <Router>
-      <NavBar />
-      <div className="h-full">
-        <NavigationRoutes />
+      <div className="page-section d-flex flex-column">
+        <NavBar />
         <ToastContainer />
-        <Loader />
+        <div className="flex-grow-1">
+          <NavigationRoutes />
+          <Loader />
+        </div>
       </div>
     </Router>
-    // </div>
   );
 };
+// const App = () => {
+//   return (
+//     <Router>
+//       <div className="page-section d-flex flex-column">
+//         <NavBar />
+//         <ToastContainer />
+//         <div className="flex-grow-1">
+//           <NavigationRoutes />
+//           <Loader />
+//         </div>
+//       </div>
+//     </Router>
+//   );
+// };
 
 export default App;

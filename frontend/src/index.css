@@ -1,3 +1,63 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+p {
+  margin: 0;
+}
+.page-section {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: #f0f7fb;
+}
+.bg-primary-custom {
+  background-color: #0e344b !important;
+}
+.bg-secondary-custom {
+  background-color: #c99d4c !important;
+}
+.header-logo {
+  height: 50px;
+}
+nav {
+  /* background-color: linear-gradient(106deg, #0e344b, #1f7e9e); */
+  background-color: #0e344b;
+}
+.login-header-btn {
+  padding: 5px 10px;
+  min-width: 100px;
+  border-radius: 10px;
+  background-color: #c99d4c;
+  color: #0e344b;
+  font-weight: 500;
+  border: 1px solid transparent;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+.login-header-btn:hover {
+  background-color: transparent;
+  border: 1px solid #c99d4c;
+  color: #c99d4c;
+}
+.login-page input {
+  max-width: 300px;
+}
+.login-page .login-box {
+  max-width: 500px;
+}
+.floating-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  height: 70px;
+  width: 70px;
+  border-radius: 50%;
+  background-color: #c99d4c;
+  color: #0e344b;
+  border: none;
+}
+.layout-band {
+  height: calc(100vh - 0px);
+  overflow-y: auto;
+}
+.err-message {
+  min-height: calc(100vh - 130px);
+  min-width: calc(100vw- 400px);
+  /* overflow-y: auto; */
+}

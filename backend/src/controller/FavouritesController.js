@@ -22,25 +22,20 @@ exports.favourits = tryCatch(async (req, res, next) => {
   }
 
   const book = await Book.findById(bookId);
-  console.log("book is =--> ", book);
+
+  isBookFavourite
+    ? await User.findByIdAndUpdate(userId, { $pull: { favourites: bookId } })
+    : await User.findByIdAndUpdate(userId, { $push: { favourites: bookId } });
 
   if (isBookFavourite) {
-    await User.findByIdAndUpdate(userId, { $pull: { favourites: bookId } });
-
-    const updatedBook = await Book.findById(bookId);
-
     res.status(201).json({
       message: "Book Removed from favourite list.",
-      result: updatedBook,
+      result: { ...book.toObject(), isFavourite: !isBookFavourite },
     });
   } else {
-    await User.findByIdAndUpdate(userId, { $push: { favourites: bookId } });
-
-    const updatedBook = await Book.findById(bookId);
-
     res.status(201).json({
       message: "Book added in favourite list.",
-      result: updatedBook,
+      result: { ...book.toObject(), isFavourite: !isBookFavourite },
     });
   }
 });

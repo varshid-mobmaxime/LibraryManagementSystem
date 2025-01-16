@@ -66,7 +66,8 @@ const ChangePassword = () => {
   }, [dispatch, navigate, newPassword, oldPassword]);
 
   return (
-    <div className="h-auto bg-zinc-900 px-12 py-8 flex items-center justify-center w-full">
+    // <div className="h-auto bg-zinc-900 px-12 py-8 flex items-center justify-center w-full">
+    <div className="page-section">
       <div className="bg-zinc-800 rounded-lg px-8 py-5 w-full md:w-3/6 lg:w-2/6">
         <p className="text-zinc-200 text-xl">Change Password</p>
 

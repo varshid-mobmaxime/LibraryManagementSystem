@@ -1,12 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
-  name: "counter",
-  initialState: { userData: null, token: "" },
+  name: "auth",
+  initialState: { userData: null, token: "", isAdmin: false },
   reducers: {
     onSignIn(state, action) {
       state.token = action.payload?.token;
       state.userData = action.payload?.user;
+      console.log("action.payload?.user is =--> ", action.payload?.user);
+
+      state.isAdmin = action.payload?.user?.role === "admin";
     },
   },
 });
