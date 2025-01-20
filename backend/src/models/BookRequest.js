@@ -18,6 +18,20 @@ const BookRequestSchema = new mongoose.Schema(
       default: BOOK_REQUEST_STATUS.NotRequested,
       enum: Object.values(BOOK_REQUEST_STATUS),
     },
+    penalty: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
+    returnDate: {
+      type: Date,
+    },
+    issueDate: {
+      type: Date,
+    },
+    cancelDate: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );

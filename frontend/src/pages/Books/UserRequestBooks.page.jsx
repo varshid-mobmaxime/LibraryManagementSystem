@@ -1,16 +1,60 @@
-import React, { useEffect, useState } from "react";
+import { Tabs } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { UserRequestBook } from "../../redux/actions/BookAction";
-import { Table, Tabs, Tag } from "antd";
-import Column from "antd/es/table/Column";
-import Request from "./UserIssueBook/Request";
+import {
+  UserCancelBook,
+  UserIssueBook,
+  UserRequestBook,
+  UserReturnBook,
+} from "../../redux/actions/BookAction";
 import Borrow from "./UserIssueBook/Borrow";
+import Cancel from "./UserIssueBook/Cancel";
+import Request from "./UserIssueBook/Request";
 import Return from "./UserIssueBook/Return";
 
 const UserRequestBooks = () => {
   const dispatch = useDispatch();
 
+  const [activeTab, setActiveTab] = useState("1");
   const [requestBookList, setRequestBookList] = useState();
+  const [issueBookList, setIssueBookList] = useState();
+  const [returnBookList, setReturnBookList] = useState();
+  const [cancelBookList, setCancelBookList] = useState();
+
+  const fetchTabData = useCallback(
+    (key) => {
+      if (key === "1") {
+        dispatch(
+          UserRequestBook((isSuccess, result) => {
+            isSuccess && setRequestBookList(result);
+          })
+        );
+      } else if (key === "2") {
+        dispatch(
+          UserIssueBook((isSuccess, result) => {
+            isSuccess && setIssueBookList(result);
+          })
+        );
+      } else if (key === "3") {
+        dispatch(
+          UserReturnBook((isSuccess, result) => {
+            isSuccess && setReturnBookList(result);
+          })
+        );
+      } else if (key === "4") {
+        dispatch(
+          UserCancelBook((isSuccess, result) => {
+            isSuccess && setCancelBookList(result);
+          })
+        );
+      }
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    fetchTabData(activeTab);
+  }, [activeTab, fetchTabData]);
 
   useEffect(() => {
     dispatch(
@@ -21,23 +65,29 @@ const UserRequestBooks = () => {
   }, [dispatch]);
 
   const onChange = (key) => {
-    console.log(key);
+    setActiveTab(key);
   };
+
   const items = [
     {
       key: "1",
       label: "Requested Books",
-      children: <Request />,
+      children: <Request dataList={requestBookList} />,
     },
     {
       key: "2",
-      label: "Borrowed Books",
-      children: <Borrow />,
+      label: "Issued Books",
+      children: <Borrow dataList={issueBookList} />,
     },
     {
       key: "3",
       label: "Returned Books",
-      children: <Return />,
+      children: <Return dataList={returnBookList} />,
+    },
+    {
+      key: "4",
+      label: "Canceled Books",
+      children: <Cancel dataList={cancelBookList} />,
     },
   ];
 

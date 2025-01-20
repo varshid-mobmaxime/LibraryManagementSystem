@@ -141,6 +141,10 @@ const NavBar = () => {
                     >
                       <a onClick={(e) => e.preventDefault()}>
                         <Space>
+                          <p style={{ color: "white" }}>
+                            {userData?.firstName} {userData?.lastName}
+                          </p>
+
                           <img
                             style={{
                               height: 50,

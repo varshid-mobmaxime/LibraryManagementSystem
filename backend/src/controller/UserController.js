@@ -50,7 +50,7 @@ exports.register = tryCatch(async (req, res, next) => {
   }
 
   //Check user name is already exist or not?
-  const userNameExist = await User.findOne({ userName: "userName" });
+  const userNameExist = await User.findOne({ userName });
   if (userNameExist) {
     return next({
       message: "UserName already existed.",
@@ -66,7 +66,7 @@ exports.register = tryCatch(async (req, res, next) => {
   }
 
   //Check email is already exist or not?
-  const emailExist = await User.findOne({ email: "email" });
+  const emailExist = await User.findOne({ email });
   if (emailExist) {
     return next({
       message: "email already existed.",
@@ -218,6 +218,29 @@ exports.updateUser = tryCatch(async (req, res) => {
   res.status(200).json({
     success: true,
     message: "User updated successfully.",
+  });
+});
+
+exports.updateProfilePic = tryCatch(async (req, res) => {
+  const { avatar } = req.body;
+  const userId = req.user._id;
+
+  // Find the user by ID
+  const user = await User.findById(userId).select("-password");
+
+  if (!user) {
+    return res.status(404).json({ success: false, message: "User not found." });
+  }
+
+  // Update the user's password
+
+  await User.findByIdAndUpdate(userId, {
+    avatar,
+  });
+
+  res.status(200).json({
+    success: true,
+    message: "Profile picture updated successfully.",
   });
 });
 

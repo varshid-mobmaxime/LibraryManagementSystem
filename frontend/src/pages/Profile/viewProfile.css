@@ -184,10 +184,10 @@
   transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
-.profile-card:hover {
+/* .profile-card:hover {
   transform: scale(1.02);
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
-}
+} */
 
 /* Profile Picture Styling */
 .profile-pic-container {
@@ -195,6 +195,7 @@
   display: inline-block;
   width: 150px;
   height: 150px;
+  border-radius: 50%;
 }
 
 .profile-pic {

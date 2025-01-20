@@ -1,15 +1,15 @@
-import { Avatar, Dropdown, Space, Table, Tag } from "antd";
+import { Avatar, Dropdown, Table, Tag } from "antd";
 import Column from "antd/es/table/Column";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { AppRoleEnum } from "../../constants/appConstant";
-import { MdDelete } from "react-icons/md";
-import { TbEdit } from "react-icons/tb";
+import { FaBookOpen } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { BookRequestEnum } from "../../constants/appConstant";
+import { ToastSuccess } from "../../constants/toastConstant";
 import {
   AllRequestedBookList,
   UpdateBookStatus,
 } from "../../redux/actions/BookAction";
-import { ToastSuccess } from "../../constants/toastConstant";
 
 const RequestBook = () => {
   const dispatch = useDispatch();
@@ -93,14 +93,19 @@ const RequestBook = () => {
       label: "Pending",
     },
     {
-      key: "Accepted",
+      key: "Issue",
       value: 2,
-      label: "Accepted",
+      label: "Issue",
     },
     {
-      key: "Canceled",
+      key: "Cancel",
       value: 3,
-      label: "Canceled",
+      label: "Cancel",
+    },
+    {
+      key: "Return",
+      value: 4,
+      label: "Return",
     },
   ];
 
@@ -127,10 +132,6 @@ const RequestBook = () => {
         }
       })
     );
-
-    console.log("Selected item key:", key);
-    console.log("Selected Value:", value);
-    console.log("Associated record:", record);
     // Perform logic based on selected key and record
   };
 
@@ -140,8 +141,17 @@ const RequestBook = () => {
         dataSource={allRequestedBookList}
         rowKey={(record) => record._id}
         bordered
-        pagination={{ pageSize: 5 }}
+        pagination={{ pageSize: 10 }}
       >
+        <Column
+          title="Book Avatar"
+          dataIndex={["url"]}
+          key="url"
+          width={100}
+          render={(url, record) => (
+            <Avatar size={50} src={record?.book?.url} icon={<FaBookOpen />} />
+          )}
+        />
         <Column title="Book Name" dataIndex={["book", "title"]} key="title" />
         <Column
           title="User Name"
@@ -155,6 +165,42 @@ const RequestBook = () => {
           dataIndex={["user", "email"]}
           key="email"
           width={200}
+        />
+        <Column
+          title="Requested Date"
+          dataIndex={["createdAt"]}
+          key="createdAt"
+          render={(createdAt) => (
+            <p>{moment(createdAt).format("DD-MM-YYYY hh:mm A")}</p>
+          )}
+        />
+        <Column
+          title="Issue Date"
+          dataIndex={["issueDate"]}
+          key="issueDate"
+          render={(issueDate, record) => (
+            <p>
+              {record?.status !== BookRequestEnum.Pending &&
+              record?.status !== BookRequestEnum.Cancel
+                ? moment(issueDate).format("DD-MM-YYYY hh:mm A")
+                : "-"}
+            </p>
+          )}
+        />
+        <Column
+          title="Return / Expected Return Date"
+          dataIndex={["returnDate"]}
+          key="returnDate"
+          render={(returnDate, record) => (
+            <div>
+              <p>
+                {record?.status !== BookRequestEnum.Pending &&
+                record?.status !== BookRequestEnum.Cancel
+                  ? moment(returnDate).format("DD-MM-YYYY hh:mm A")
+                  : "-"}
+              </p>
+            </div>
+          )}
         />
         <Column
           title="Status"
@@ -188,8 +234,10 @@ const RequestBook = () => {
                   color={
                     statusName === "Pending"
                       ? "blue"
-                      : statusName === "Accepted"
+                      : statusName === "Issue"
                       ? "green"
+                      : statusName === "Return"
+                      ? "orange"
                       : "red"
                   }
                 >

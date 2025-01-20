@@ -16,7 +16,14 @@ const BookSchema = new mongoose.Schema(
     },
     copies: {
       type: Number,
+      select: false,
       required: true,
+    },
+    availableCopies: {
+      type: Number,
+      default: function () {
+        return this.copies;
+      },
     },
     author: {
       type: String,

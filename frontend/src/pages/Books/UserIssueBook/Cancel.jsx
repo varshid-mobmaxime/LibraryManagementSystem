@@ -4,7 +4,7 @@ import React from "react";
 import moment from "moment";
 import { FaBookOpen } from "react-icons/fa";
 
-const Borrow = ({ dataList }) => {
+const Cancel = ({ dataList }) => {
   return (
     <div>
       <Table
@@ -24,30 +24,16 @@ const Borrow = ({ dataList }) => {
         />
         <Column title="Book Name" dataIndex={["book", "title"]} key="title" />
         <Column
-          title="Issue Date"
+          title="Cancel Date"
           dataIndex={["issueDate"]}
           key="issueDate"
           render={(issueDate) => (
             <p>{moment(issueDate).format("DD-MM-YYYY hh:mm A")}</p>
           )}
         />
-        <Column
-          title="Expected Return Date"
-          dataIndex={["returnDate"]}
-          key="returnDate"
-          render={(returnDate) => (
-            <p>{moment(returnDate).format("DD-MM-YYYY hh:mm A")}</p>
-          )}
-        />
-        <Column
-          title="Overdue charge"
-          dataIndex={["penalty"]}
-          key="Penalty"
-          render={(penalty) => <p>₹ {penalty}</p>}
-        />
       </Table>
     </div>
   );
 };
 
-export default Borrow;
+export default Cancel;

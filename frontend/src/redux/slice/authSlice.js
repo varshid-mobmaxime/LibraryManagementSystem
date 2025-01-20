@@ -11,8 +11,11 @@ const authSlice = createSlice({
 
       state.isAdmin = action.payload?.user?.role === "admin";
     },
+    onProfilePicUpdate(state, action) {
+      state.userData.avatar = action.payload;
+    },
   },
 });
 
-export const { onSignIn } = authSlice.actions;
+export const { onSignIn, onProfilePicUpdate } = authSlice.actions;
 export default authSlice.reducer;

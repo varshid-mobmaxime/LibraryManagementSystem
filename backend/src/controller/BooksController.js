@@ -69,6 +69,7 @@ exports.getBook = tryCatch(async (req, res) => {
   const bookRequest = await BookRequest.findOne({
     user: userId,
     book: req.params.id,
+    status: { $nin: [BOOK_REQUEST_STATUS.Return, BOOK_REQUEST_STATUS.Cancel] },
   });
 
   const isRequested = !!bookRequest;

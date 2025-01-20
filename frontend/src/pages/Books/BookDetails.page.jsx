@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { Modal, Tag } from "antd";
 import RouteConstants from "../../constants/navigationRouteConstant";
-import { ToastSuccess } from "../../constants/toastConstant";
+import { ToastError, ToastSuccess } from "../../constants/toastConstant";
 import {
   BookFavourite,
   DeleteBookRequest,
@@ -45,7 +45,7 @@ const BookDetails = () => {
 
   const [bookDetails, setBookDetails] = useState();
 
-  const { title, desc, copies, url, author, language, isFavourite } =
+  const { title, desc, availableCopies, url, author, language, isFavourite } =
     bookDetails || {};
   console.log("isFavourits is =--> ", isFavourite);
 
@@ -63,9 +63,14 @@ const BookDetails = () => {
     dispatch(
       BookFavourite(
         { bookId: state?.id },
-        (isSuccess, result) => {
+        (isSuccess, result, message) => {
           console.log("FAV =--> ", result);
-          setBookDetails(result);
+          if (isSuccess) {
+            ToastSuccess(message);
+            setBookDetails(result);
+          } else {
+            ToastError(message);
+          }
           // isSuccess && setBookDetails(result);
         }
         //   (isSuccess) => {
@@ -110,26 +115,39 @@ const BookDetails = () => {
             <img src={url} alt={title} className="img-thumbnail" />
           </div>
           <div className="d-flex align-items-center justify-content-between my-3">
-            {!isAdmin &&
-            bookDetails?.status === BookRequestEnum.NotRequested ? (
-              <button
-                onClick={onRequestBook}
-                title={"Request for book"}
-                className="rounded py-2 w-50 h-10 text-black"
-                style={{ backgroundColor: "Highlight" }}
-              >
-                Request for book
-              </button>
-            ) : (
-              <div className="d-flex align-items-center justify-content-center">
-                <h5 style={{ color: "white", margin: 0 }}>Book status : </h5>
-                <Tag
-                  className="ms-2"
-                  color={"orange"}
-                  key={bookDetails?.status}
-                >
-                  {bookDetails?.statusName}
-                </Tag>
+            {!isAdmin && (
+              <div style={{ flex: 1 }}>
+                {bookDetails?.status === BookRequestEnum.NotRequested ||
+                bookDetails?.status === BookRequestEnum.Cancel ||
+                bookDetails?.status === BookRequestEnum.Return ? (
+                  <div style={{ flex: 1 }}>
+                    {availableCopies > 0 ? (
+                      <button
+                        onClick={onRequestBook}
+                        title={"Request for book"}
+                        className="rounded py-2 w-50 h-10 text-black"
+                        style={{ backgroundColor: "Highlight" }}
+                      >
+                        Request for book
+                      </button>
+                    ) : (
+                      <h5 className="text-danger ">Out of stock</h5>
+                    )}
+                  </div>
+                ) : (
+                  <div className="d-flex align-items-center ">
+                    <h5 style={{ color: "white", margin: 0 }}>
+                      Book status :{" "}
+                    </h5>
+                    <Tag
+                      className="ms-2"
+                      color={"orange"}
+                      key={bookDetails?.status}
+                    >
+                      {bookDetails?.statusName}
+                    </Tag>
+                  </div>
+                )}
               </div>
             )}
             {isAdmin ? (
@@ -181,7 +199,7 @@ const BookDetails = () => {
           <div>
             <h2>{title}</h2>
             <p className="fs-6 mb-4">{desc}</p>
-            <p className="fs-6 mb-4">Available Copies : {copies}</p>
+            <p className="fs-6 mb-4">Available Copies : {availableCopies}</p>
             <p className="fs-6 mb-4">Author Name : {author}</p>
             <p className="fs-6 mb-4">Launguage : {language}</p>
           </div>

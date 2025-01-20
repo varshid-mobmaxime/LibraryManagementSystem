@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.4.0",
     "antd": "^5.23.0",
+    "antd-img-crop": "^4.24.0",
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
     "cra-template": "1.2.0",

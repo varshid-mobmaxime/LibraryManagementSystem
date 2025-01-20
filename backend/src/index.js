@@ -4,11 +4,14 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import helmet from "helmet";
+import multer from "multer";
+import path from "path";
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const booksRoutes = require("./routes/booksRoutes");
 const requestBooksRoutes = require("./routes/requestBookRoute");
 const favouriteRoutes = require("./routes/favouriteRoutes");
+const mediaUploadRoutes = require("./routes/MediaUploadRoutes");
 // const commentsRoutes = require("./routes/commentsRoutes");
 const middlewares = require("./middleware/middlewares");
 
@@ -53,6 +56,16 @@ const startServer = async () => {
   app.use("/books", booksRoutes);
   app.use("/request-book", requestBooksRoutes);
   app.use("/books", favouriteRoutes);
+  // Serve static files
+  // app.use("/profile", express.static(path.join(__dirname, "upload/images")));
+  // app.use("/profile", express.static("upload/images"));
+
+  app.use("/profileImages", express.static("upload/profileImages"));
+  app.use("/bookImages", express.static("upload/bookImages"));
+
+  // Routes
+  app.use("/media-upload", mediaUploadRoutes);
+
   // app.use("/posts", postsRoutes);
   // app.use("/comments", commentsRoutes);
 

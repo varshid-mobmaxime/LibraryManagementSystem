@@ -195,7 +195,7 @@ const Dashboard = () => {
     {
       key: RouteConstants.USER_REQUESTED_BOOKS,
       icon: <IoIosBookmarks />,
-      label: "Issue Book",
+      label: "Book History",
     },
     // {
     //   key: "3",

@@ -84,7 +84,11 @@ export const BookFavourite = (data, callBack) => {
         loaderRef.current.hide();
         console.log("response is =--> ", response);
 
-        callBack?.(response?.data?.success, response?.data?.result); // CallBack Function Call
+        callBack?.(
+          response?.data?.success,
+          response?.data?.result,
+          response?.data?.message
+        ); // CallBack Function Call
       })
       .catch((err) => {
         console.log("books favourite APi Err => ", err);
@@ -137,10 +141,68 @@ export const RequestBook = (payload, callBack) => {
   };
 };
 
+export const UserAllBook = (id, callBack) => {
+  loaderRef.current.show();
+  return () => {
+    apiGet(`${ApiConstants.UserAllBookUrl}/${id}`)
+      .then((response) => {
+        loaderRef.current.hide();
+        callBack?.(response?.data?.success, response?.data?.result); // CallBack Function Call
+      })
+      .catch((err) => {
+        console.log("Delete books APi Err => ", err);
+      });
+  };
+};
+
 export const UserRequestBook = (callBack) => {
   loaderRef.current.show();
   return () => {
     apiGet(ApiConstants.UserBookRequestUrl)
+      .then((response) => {
+        loaderRef.current.hide();
+        callBack?.(response?.data?.success, response?.data?.result); // CallBack Function Call
+      })
+      .catch((err) => {
+        console.log("Delete books APi Err => ", err);
+      });
+  };
+};
+
+export const UserIssueBook = (callBack) => {
+  loaderRef.current.show();
+  return () => {
+    apiGet(ApiConstants.UserBookIssueUrl)
+      .then((response) => {
+        console.log("response is =--> ", response);
+
+        loaderRef.current.hide();
+        callBack?.(response?.data?.success, response?.data?.result); // CallBack Function Call
+      })
+      .catch((err) => {
+        console.log("Delete books APi Err => ", err);
+      });
+  };
+};
+
+export const UserReturnBook = (callBack) => {
+  loaderRef.current.show();
+  return () => {
+    apiGet(ApiConstants.UserBookReturnUrl)
+      .then((response) => {
+        loaderRef.current.hide();
+        callBack?.(response?.data?.success, response?.data?.result); // CallBack Function Call
+      })
+      .catch((err) => {
+        console.log("Delete books APi Err => ", err);
+      });
+  };
+};
+
+export const UserCancelBook = (callBack) => {
+  loaderRef.current.show();
+  return () => {
+    apiGet(ApiConstants.UserBookCancelUrl)
       .then((response) => {
         loaderRef.current.hide();
         callBack?.(response?.data?.success, response?.data?.result); // CallBack Function Call
