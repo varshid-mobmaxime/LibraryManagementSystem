@@ -16,7 +16,7 @@ const BookSchema = new mongoose.Schema(
     },
     copies: {
       type: Number,
-      select: false,
+      // select: false,
       required: true,
     },
     availableCopies: {
@@ -40,5 +40,7 @@ const BookSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+BookSchema.index({ title: "text", author: "text" });
 
 module.exports = mongoose.model("Books", BookSchema);

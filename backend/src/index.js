@@ -4,13 +4,17 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import helmet from "helmet";
+
 import multer from "multer";
 import path from "path";
+const socket = require("socket.io");
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes");
 const booksRoutes = require("./routes/booksRoutes");
 const requestBooksRoutes = require("./routes/requestBookRoute");
 const favouriteRoutes = require("./routes/favouriteRoutes");
+const ratingRoutes = require("./routes/ratingRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 const mediaUploadRoutes = require("./routes/MediaUploadRoutes");
 // const commentsRoutes = require("./routes/commentsRoutes");
 const middlewares = require("./middleware/middlewares");
@@ -22,9 +26,10 @@ const ErrorResponse = require("./middleware/ErrorResponse");
 dotenv.config();
 
 const port = process.env.PORT || 4000;
+import { app, server } from "./socket/socket.js";
 
 const startServer = async () => {
-  const app = express();
+  // const app = express();
 
   // Example URI, replace with your actual connection string
   const uri = process?.env?.MONGO_URI; // Make sure MONGO_URI is defined in your environment variables
@@ -56,6 +61,8 @@ const startServer = async () => {
   app.use("/books", booksRoutes);
   app.use("/request-book", requestBooksRoutes);
   app.use("/books", favouriteRoutes);
+  app.use("/books-rating", ratingRoutes);
+  app.use("/message", messageRoutes);
   // Serve static files
   // app.use("/profile", express.static(path.join(__dirname, "upload/images")));
   // app.use("/profile", express.static("upload/images"));
@@ -69,9 +76,31 @@ const startServer = async () => {
   // app.use("/posts", postsRoutes);
   // app.use("/comments", commentsRoutes);
 
-  app.listen({ port }, () =>
+  const server = app.listen({ port }, () =>
     console.log(`🚀 Server ready at http://localhost:${port}`)
   );
+
+  // const io = socket(server, {
+  //   cors: {
+  //     origin: `http://localhost:${port}`,
+  //     credentials: true,
+  //   },
+  // });
+
+  // global.onlineUsers = new Map();
+  // io.on("connection", (socket) => {
+  //   global.chatSocket = socket;
+  //   socket.on("add-user", (userId) => {
+  //     onlineUsers.set(userId, socket.id);
+  //   });
+
+  //   socket.on("send-msg", (data) => {
+  //     const sendUserSocket = onlineUsers.get(data.to);
+  //     if (sendUserSocket) {
+  //       socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+  //     }
+  //   });
+  // });
 
   app.use(middlewares.notFound);
   app.use(middlewares.errorHandler);

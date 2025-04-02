@@ -24,66 +24,6 @@ const RequestBook = () => {
     );
   }, [dispatch]);
 
-  const data = [
-    {
-      _id: "6784e92e46225e8a6e1eb7e5",
-      user: {
-        _id: "6780fc16df6bdaa96b5acb28",
-        firstName: "Hardik",
-        lastName: "Sharma",
-        email: "hardik@yopmail.com",
-      },
-      book: {
-        _id: "677fb985b131eda17c55b59e",
-        title: "Think Straight ",
-        author: " Darius Foroux",
-      },
-      status: 1,
-      createdAt: "2025-01-13T10:21:34.596Z",
-      updatedAt: "2025-01-13T10:21:34.596Z",
-      __v: 0,
-      statusName: "Pending",
-    },
-    {
-      _id: "67850a774e9683d7445b2103",
-      user: {
-        _id: "6780fc16df6bdaa96b5acb28",
-        firstName: "Hardik",
-        lastName: "Sharma",
-        email: "hardik@yopmail.com",
-      },
-      book: {
-        _id: "677e42140e02a994b9d6d597",
-        title: "ABCD",
-        author: "varshid Patel",
-      },
-      status: 1,
-      createdAt: "2025-01-13T12:43:35.574Z",
-      updatedAt: "2025-01-13T12:43:35.574Z",
-      __v: 0,
-      statusName: "Pending",
-    },
-    {
-      _id: "67850d744e9683d7445b2119",
-      user: {
-        _id: "6780fc16df6bdaa96b5acb28",
-        firstName: "Hardik",
-        lastName: "Sharma",
-        email: "hardik@yopmail.com",
-      },
-      book: {
-        _id: "677fc31d83b471d23d45bad8",
-        title: "Don't Believe Everything You Think",
-        author: " Joseph NguyenJoseph Nguyen",
-      },
-      status: 1,
-      createdAt: "2025-01-13T12:56:20.704Z",
-      updatedAt: "2025-01-13T12:56:20.704Z",
-      __v: 0,
-      statusName: "Pending",
-    },
-  ];
-
   const [statusName, setStatusName] = useState();
 
   const items = [

@@ -65,11 +65,12 @@ exports.updateBookStatus = tryCatch(async (req, res) => {
     // const MomentIssueDate = moment(IDate).add(7, "days");
     const CurrentDate = moment();
     const Diff = CurrentDate.diff(momentReturnDate, "days");
+    const penalty = Math.max(Diff * 10, 0); // Ensures penalty is never negative
 
     await BookRequest.findByIdAndUpdate(bookRequestId, {
       status: status,
       returnDate: moment(),
-      penalty: Diff * 10,
+      penalty: penalty,
     });
   } else if (status === BOOK_REQUEST_STATUS.Cancel) {
     await BookRequest.findByIdAndUpdate(bookRequestId, {

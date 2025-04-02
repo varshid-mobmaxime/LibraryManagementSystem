@@ -6,6 +6,7 @@ const {
   getBooks,
   updateBook,
   getFavouriteBooks,
+  getDashboardDetails,
 } = require("../controller/BooksController");
 
 const {
